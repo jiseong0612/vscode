@@ -60,15 +60,101 @@
 		let operator = '';
 		const $operator = document.querySelector('#operator');
 		const $result = document.querySelector('#result');
-
-		const onClickNumber = (number) => () =>{
+		
+		//고차함수가 아닌 방법
+		const onClickNumber = (event) => {
 			if(operator){
-				numTwo += number;
+				if(!numTwo){	//넘버2 값이 없으면 지워라
+					$result.value = '';
+				}
+				numTwo += event.target.textContent;
 			}else{
-				numOne += number;
+				numOne += event.target.textContent;
+			}
+			$result.value += event.target.textContent;
+		}
+
+		document.querySelector('#num-1').addEventListener('click', onClickNumber);
+		document.querySelector('#num-2').addEventListener('click', onClickNumber);
+		document.querySelector('#num-3').addEventListener('click', onClickNumber);
+		document.querySelector('#num-4').addEventListener('click', onClickNumber);
+		document.querySelector('#num-5').addEventListener('click', onClickNumber);
+		document.querySelector('#num-6').addEventListener('click', onClickNumber);
+		document.querySelector('#num-7').addEventListener('click', onClickNumber);
+		document.querySelector('#num-8').addEventListener('click', onClickNumber);
+		document.querySelector('#num-9').addEventListener('click', onClickNumber);
+		document.querySelector('#num-0').addEventListener('click', onClickNumber);
+
+		//고차함수 방법(함수의 중복을 피한다는 같다. 대신함수가 함수를 반환)
+		const onClickOperator = (op) =>() =>{
+			if(operator == op){
+				switch(op){
+					case '+': 
+						numOne = parseInt(numOne) + parseInt(numTwo);
+						break;
+					case '-': 
+						numOne =parseInt(numOne) - parseInt(numTwo);
+						break;
+					case '*': 
+						numOne =parseInt(numOne) * parseInt(numTwo);
+						break;
+					case '/': 
+						numOne =parseInt(numOne) / parseInt(numTwo);
+						break;
+					default : 
+						break;
+				}
+				$result.value = numOne;
+				numTwo = 0;
+			}
+			if(!numTwo)
+			if(numOne){
+				operator = op;
+				$operator.value = op;
+			}else{
+				alert('숫자를 먼저 입력해 주세요');
+
 			}
 		}
-		document.querySelector('#num-1').addEventListener('click', onClickNumber('0'));
-	</script>
+		
+		document.querySelector('#plus').addEventListener('click',onClickOperator('+'));
+		document.querySelector('#minus').addEventListener('click', onClickOperator('-'));
+		document.querySelector('#multiply').addEventListener('click', onClickOperator('*'));
+		document.querySelector('#dvide').addEventListener('click', onClickOperator('/'));
+		document.querySelector('#calculate').addEventListener('click', ()=>{
+			if(numTwo){
+				switch (operator){
+					case '+' : 
+						$result.value = parseInt(numOne) + parseInt(numTwo);
+						break;
+					case '-' : 
+						$result.value = numOne - numTwo;
+						break;
+					case '*' : 
+					$result.value = numOne * numTwo;
+						break;
+					case '/' : 
+						$result.value = numOne / numTwo;
+						break;
+					default : 
+						break;
+					//나머지 파싱 안 한 이유 : 더하기를 제외한 나머진 문자열을 숫자로 변경시킨 후 계산
+					//햇갈리면 그냥 다 해 줘도 됨
+				}
+				operator.value = '';
+				$operator.value = '';
+				numOne = $result.value;
+				numTwo = 0;
+			}
+		});
+
+		document.querySelector('#clear').addEventListener('click', ()=>{
+			 numOne = '';
+			 numTwo = '';
+			 operator = '';
+			 $operator.value = '';
+			 $result.value = '';
+		});
+		</script>
 </body>
 </html>
