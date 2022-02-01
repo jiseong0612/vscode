@@ -51,7 +51,7 @@
 
 		console.log(answer);
 		const tries = [];
-
+		let out = 0;
 		var checkInput = function(value){
 			if(value.length !== 4){
 				return alert('4자리 숫자를 입력하세요');	//undefind를 리턴
@@ -87,11 +87,13 @@
 
 			let strike = 0;
 			let ball = 0;
+			let index = [];
 
 			//anwer  = 3146, value = 1347
 			for(let i = 0; i< answer.length; i++){
-				const index = value.indexOf(answer[i]);
-				if(index > -1){
+				 index.push(value.indexOf(answer[i]));
+				//일치하는 숫자가 있을 경우
+				if(index[i] > -1){
 					if(i == index){
 						strike++;
 					}else{
@@ -99,7 +101,17 @@
 					}
 				}
 			}
-			$logs.append(`${value} : ${strike} 스트라이크 ${ball} 볼`, document.createElement('br'));
+			if(ball + strike == 0){
+				out++;
+				$logs.append(`${out} 아웃!`, document.createElement('br'));
+			}else{
+				$logs.append(`${value} : ${strike} 스트라이크 ${ball} 볼`, document.createElement('br'));
+			}
+
+			if(out == 3){
+				alert("Game Over......");
+				window.location.reload();
+			}
 			tries.push(value);
 			
 		});
