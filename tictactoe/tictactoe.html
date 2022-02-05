@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>틱택토게임</title>
+    <style>
+        table{
+            border-collapse: collapse;
+        }
+
+        td{
+            border : 1px solid black;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    
+	<script>
+		let turn = 'O';
+		const rows = [];
+		// for(let i = 0; i<3; i++){
+		// 	rows.push([]);			//const rows = [[], [], []];		배열 안에 배열 3개를 넣는다.
+		// }
+
+		const $table = document.createElement('table');
+		const $result = document.createElement('div');
+		const callback = (event)=>{
+			//이벤트 버블링 현상으로 인해 td가 선택된다.
+			//근데 나는 $table을 진짜 선택하고 싶은데?
+			//이럴땐 event.currentTarget을 사용한다.
+			console.log('target >>> ', event.target)
+			console.log('currentTarget >>> ', event.currentTarget)
+			if(event.target.textContent) return;	//칸에 글자가 있나?
+			event.target.textContent = turn;			//처음엔 'O' 를 주고 turn 변수에  'X'를 할당한다
+			
+			turn = (turn === 'O') ? 'X' : 'O';
+			// if(turn === 'O'){
+			// 	turn = 'X';
+			// }else{
+			// 	turn = 'O';
+			// }
+		}
+
+		for(let i = 0; i < 3; i++){
+			const $tr = document.createElement('tr');
+			const cells = [];
+			for(let j = 0; j < 3; j++){
+				const $td = document.createElement('td');
+				cells.push($td);
+
+				$tr.append($td);
+			}
+			rows.push(cells);
+			$table.append($tr);
+		}
+		document.body.append($table);
+		document.body.append($result);
+
+		$table.addEventListener('click', callback);
+ 	</script>
+</body>
+</html>

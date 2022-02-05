@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>틱택토게임</title>
+    <style>
+        table{
+            border-collapse: collapse;
+        }
+
+        td{
+            border : 1px solid black;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    
+	<script>
+		const arr1 =  Array(20).fill().map((obj,i) =>{
+			return 1;
+		})
+
+		const arr = [];
+		for(let i = 0; i< 5; i++){
+			const row = [];
+			for(let j = 0; j < 4; j++){
+				row.push(1);
+			}
+			arr.push(row);
+		}
+
+		console.log(arr)
+	</script>
+</body>
+</html>
