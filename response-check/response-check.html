@@ -37,24 +37,40 @@
         let startTime;
         let endTime;
         const records = [];
-
+        let setTimeId;
+        let life = 0;
         $screen.addEventListener('click', (event)=>{
+            if(life >= 3){
+                alert('game overe');
+            }
             if(event.target.classList.contains('waiting')){
                 $screen.classList.replace('waiting', 'ready')
                 $screen.textContent ='준비하시고~';
                 
-                setTimeout(()=>{
+                setTimeId = setTimeout(()=>{
                     startTime = new Date();
                     $screen.classList.replace('ready', 'now')
                     $screen.textContent ='클릭!!!~';
                 },Math.floor(Math.random()* 1000) + 2000);
             }else if(event.target.classList.contains('ready')){
+                $screen.classList.replace('ready', 'waiting');
+                $screen.textContent = '너무 성급하군요';
+                life++;
+                clearTimeout(setTimeId);
             }else if(event.target.classList.contains('now')){
                 endTime = new Date();
                 const diff = endTime - startTime;
                 records.push(diff);
                 const average = records.reduce((a, c)=> a+c, 0)/records.length;
                 $result.textContent = `현재 : ${diff}ms, 평균 : ${average}ms`;
+
+                const topFive = records.sort((a,b)=> a-b).slice(0, 5);    //오름차순으로 정렬한 후 상위 5개 자름
+                topFive.forEach((obj, i)=>{
+                    $result.append(
+                        document.createElement('br'),
+                        `${i + 1}위  : ${obj}ms`,
+                    );
+                });
                 startTime = null;
                 endTime = null;
                 $screen.classList.replace('now', 'waiting');
