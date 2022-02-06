@@ -19,8 +19,16 @@
     </style>
 </head>
 <body>
-    
+    <div><button>클릭</button></div>
 	<script>
+        const $div = document.querySelector('div');
+
+        $div.addEventListener('click',()=> {
+            alert('hello, event bubbling');
+            console.log(event.currentTarget);
+            console.log(event.target.tagName);
+        });
+
 		const arr1 =  Array(20).fill().map((obj,i) =>{
 			return 1;
 		})
