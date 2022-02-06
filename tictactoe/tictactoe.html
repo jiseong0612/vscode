@@ -29,21 +29,117 @@
 
 		const $table = document.createElement('table');
 		const $result = document.createElement('div');
+		
+		//[ 
+		//	[td, td, td],
+		//  [td, td, td],
+		//  [td, td, td],
+		//]
+
+		const checkWinner = (target)=>{
+			// let rowIndex;
+			// let cellIndex;
+			let rowIndex = target.parentNode.rowIndex;
+			let cellIndex = target.cellIndex;
+			console.log(rowIndex)
+			console.log(cellIndex)
+
+			//위의 td배열을 3 * 3번씩 돌면서, 클릭한 타겟과 이벤트가 발생한 태그의 인덱스 위치를 반환
+			// rows.forEach((row, ri) => {
+			// 	row.forEach((cell, ci)=>{
+			// 		if(cell === target){
+			// 			console.log('cell ',cell);
+			// 			console.log(target);
+			// 			rowIndex = ri;
+			// 			cellIndex = ci;
+			// 		}
+			// 	});
+			// });
+			
+			//세 칸 다 채워졌나?
+			let  hasWinner = false;
+			//가로줄 검사
+			if(
+				rows[rowIndex][0].textContent === turn &&
+				rows[rowIndex][1].textContent === turn &&
+				rows[rowIndex][2].textContent === turn
+			){
+				hasWinner = true;
+			}
+				
+			//세로줄 검사
+			if(
+				rows[0][cellIndex].textContent === turn &&
+				rows[1][cellIndex].textContent === turn &&
+				rows[2][cellIndex].textContent === turn
+			){
+				hasWinner = true;
+			}
+
+			//대각선 검사
+			if(
+				rows[0][0].textContent === turn &&
+				rows[1][1].textContent === turn &&
+				rows[2][2].textContent === turn
+			){
+				hasWinner = true;
+			}
+			//반대 대각선 검사
+			if(
+				rows[0][2].textContent === turn &&
+				rows[1][1].textContent === turn &&
+				rows[2][0].textContent === turn
+			){
+				hasWinner = true;
+			}
+
+			return hasWinner;
+		}
+
 		const callback = (event)=>{
 			//이벤트 버블링 현상으로 인해 td가 선택된다.
 			//근데 나는 $table을 진짜 선택하고 싶은데?
 			//이럴땐 event.currentTarget을 사용한다.
 			console.log('target >>> ', event.target)
 			console.log('currentTarget >>> ', event.currentTarget)
-			if(event.target.textContent) return;	//칸에 글자가 있나?
+				
+			if(event.target.textContent) return;		//칸에 글자가 있나?
 			event.target.textContent = turn;			//처음엔 'O' 를 주고 turn 변수에  'X'를 할당한다
+			//승부 판단하기
+			if(checkWinner(event.target)){
+				$result.textContent = `${turn} 님이 승리!`;
+				$table.removeEventListener('click', callback);
+				return;
+			};
+			//칸이 9칸 전부 꽉 찼으면 (무승부) 방법1
+			let count = 0;
+			rows.forEach((row)=>{
+				row.forEach((cell)=>{
+					if(cell.textContent){
+						count += 1;
+					}
+				});
+			});
+
+			//한 칸이라도 비어 있지 않으면 방법2
+			/*let draw = true;
+			rows.forEach((row)=>{	//9칸 전부 돌아서 한칸이라도 비어있음을 발견하면 무승부 아님
+				row.forEach((cell)=>{
+					if(!cell.textContent){
+						draw = false;
+					}
+				})
+			})
+			*/
+			//방법 3 every()을 이용 모두 참일 경우
+			const draw = rows.flat().every((td)=> td.textContent);
 			
+			if(draw){
+				$result.textContent = `무승부`;
+				return;
+			}
+
 			turn = (turn === 'O') ? 'X' : 'O';
-			// if(turn === 'O'){
-			// 	turn = 'X';
-			// }else{
-			// 	turn = 'O';
-			// }
 		}
 
 		for(let i = 0; i < 3; i++){
