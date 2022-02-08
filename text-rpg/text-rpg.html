@@ -63,6 +63,14 @@
 			hp : 100,
 			xp : 0,
 			att : 10,
+			attack : function(monster){		//아래 heal과 같이 : function생략 가능
+				monster.hp -= this.att;
+				this.hp -= monster.att;
+			},
+			heal(monster){
+				this.hp += 20;
+				this.hp -= monster.att;
+			},
 		};
 
 		let monster = null;
@@ -101,6 +109,7 @@
 					JSON.stringify(monsterList[Math.floor(Math.random()* monsterList.length)])
 				);
 
+			
 				monster.maxHp = monster.hp;
 				$monsterName.textContent = monster.name;
 				$monsterHp.textContent = `HP:${monster.hp}/${monster.maxHp}`;
@@ -117,7 +126,11 @@
 			const input = event.target['battle-input'].value;
 
 			if(input === '1'){
-
+				hero.attack(monster);
+				monster.attack(hero);
+				$heroHp.textContent = `HP:${hero.hp}/${hero.maxHp}`;
+				$monsterHp.textContent = `HP:${monster.hp}/${monster.maxHp}`;
+				$message.textContent = `${hero.att}의 데미지를 주고, ${monster.att}의 데미지를 받았다.`;
 			}else if(input === '2'){
 
 			}else if(input === '3'){
