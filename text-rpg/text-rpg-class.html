@@ -91,6 +91,9 @@
 					$battleMenu.style.display = 'block';
 				}
 			}
+			showMessage(text){
+				$message.textContent = text;
+			}
 			onGameMenuInput = (event)=>{
 				console.log(this);
 				event.preventDefault();
@@ -98,6 +101,18 @@
 
 				if(input === '1'){			//모험
 					this.chageScreen('battle');							//모험일 경우 배틀로 화면을 전환해준다.
+					const randomIndex = Math.floor(Math.random()* this.monsterList.length);
+					const randomMonster = this.monsterList[randomIndex];
+
+					this.monster = new Monster(
+						this,
+						randomMonster.name,
+						randomMonster.hp,
+						randomMonster.att,
+						randomMonster.xp,
+					);
+					this.updateMonsterStat();
+					this.showMessage(`몬스터와 마주쳤다. ${this.monster.name}인것 같다.`);
 				}else if(input === '2'){	//휴식
 					
 				}else if(input === '3'){	//종료
@@ -109,7 +124,13 @@
 				event.preventDefault();
 				const input = event.target['battle-input'].value;
 
-				if(input === '1'){			//공격
+				if(input === '1'){		//공격
+					const {hero, monster} = this;		//this에 저장된 영웅과 몬스터 객체를 불러온다.
+					hero.attack(monster);
+					monster.attack(hero);
+					this.showMessage(`${hero.att}의 데미지를 주고 ${monster.att}의 데미지를 받았다`);
+					this.updateHeroStat();
+					this.updateMonsterStat();
 
 				}else if(input === '2'){	//회복
 					
@@ -142,7 +163,7 @@
 					return;
 				}
 				$monsterName.textContent = monster.name;
-				$monsterHp.textContent = `HP: ${monster.hp}/${monster.maxHp}`;
+				$monsterHp.textContent = `HP: ${monster.hp}`;
 				$monsterAtt.textContent = `ATT: ${monster.att}`;
 			}
 		}
