@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>아이디 : <input type="text" value="" /></div>
+
+    <script>
+      // setCookie(변수이름, 변수값, 기간);
+      var setCookie = function (name, value, exp) {
+        var date = new Date();
+        date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
+        document.cookie =
+          name + "=" + value + ";expires=" + date.toUTCString() + ";path=/";
+      };
+
+      setCookie("expend", "true", 1);
+
+      // getCookie(변수이름)
+      var getCookie = function (name) {
+        var value = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
+
+        return value ? value[2] : null;
+      };
+
+      var is_expend = getCookie("expend");
+      console.log("쿠키 is_expend변수에 저장된 값: " + is_expend);
+
+      // deleteCookie(변수이름)
+      var deleteCookie = function (name) {
+        document.cookie = name + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;";
+      };
+
+      deleteCookie("name");
+    </script>
+  </body>
+</html>
