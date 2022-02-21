@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>끝말잇기</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- 뷰에서는 케밥-케이스 , js에선 카멜 케이스... 뷰에서 자동으로 바꿔줌... 이상하다 -->
+    <div id="root">
+        <word-relay start-word="초밥"></word-relay>
+        <word-relay start-word="한국"></word-relay>
+    </div>
+
+    <!--컴포넌트는 인스턴스보다 항상 위에 위치할 것-->
+    <script>
+        //컴포넌트
+        Vue.component('wordRelay', {       
+            template: `
+            <div>
+                <div>{{word}}</div>
+                <form v-on:submit="onSubmitForm">
+                    <input type="text" v-model="value" ref="answer">
+                    <button type="submit">입력</button>
+                </form>
+                <div>{{result}}</div>
+            </div>
+           `,
+           props:['startWord'],
+            data() {
+                console.log(this);
+                return {
+                    word: this.startWord,
+                    value: '',
+                    result: '',
+                };
+            },
+            methods: {
+                onSubmitForm(event) {
+                    event.preventDefault();
+                    if (this.word[this.word.length - 1] === this.value[0]) {
+                        this.result = '딩동댕';
+                        this.word = this.value;
+                        this.value = '';
+                        this.$refs.answer.focus();
+                    } else {
+                        this.result = '땡';
+                        this.value = '';
+                        this.$refs.answer.focus();
+
+                    }
+
+                }
+            }
+        })
+    </script>
+    <script>
+        //인스턴스
+        const app = new Vue({
+            el: '#root',
+        })
+    </script>
+</body>
+
+</html>
